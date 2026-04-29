@@ -1,0 +1,4 @@
+# Deny direct web access — this directory contains DB dumps.
+<RequireAll>
+  Require all denied
+</RequireAll>

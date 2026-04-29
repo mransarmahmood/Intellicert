@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #FAFAF9;
+    color: #334155;
+    line-height: 1.55;
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.015em;
+    color: #0F172A;
+  }
+  ::selection { background: rgba(234,88,12,.25); color: #0F172A; }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-gradient-to-b from-brand-500 to-brand-600 text-white shadow-[0_8px_20px_-8px_rgba(234,88,12,.55)] hover:shadow-[0_12px_28px_-8px_rgba(234,88,12,.7)] hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply border border-ink-line bg-white text-ink shadow-sm hover:border-slate-300 hover:bg-slate-50;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+  .btn-md { @apply px-4 py-2.5 text-[14px]; }
+  .btn-sm { @apply px-3 py-1.5 text-[12.5px]; }
+  .input {
+    @apply w-full rounded-lg border border-ink-line bg-white px-3.5 py-2.5 text-[14px] text-ink shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+  }
+  .label {
+    @apply mb-1.5 block text-[12.5px] font-semibold text-ink-body;
+  }
+  .card {
+    @apply rounded-2xl border border-ink-line bg-white shadow-card;
+  }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ring-1;
+  }
+  .badge-brand { @apply bg-brand-50 text-brand-700 ring-brand-500/20; }
+  .badge-green { @apply bg-green-50 text-green-700 ring-green-500/20; }
+  .badge-slate { @apply bg-slate-100 text-slate-600 ring-slate-300/40; }
+}

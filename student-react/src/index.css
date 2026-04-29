@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #FAFAF9;
+    color: #334155;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4, h5 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    letter-spacing: -0.018em;
+    color: #0F172A;
+  }
+  ::selection { background: rgba(234,88,12,.25); color: #0F172A; }
+}
+
+@layer components {
+  .wrap { @apply mx-auto w-full max-w-wrap px-6; }
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary {
+    @apply bg-gradient-to-b from-brand-500 to-brand-600 text-white shadow-[0_10px_28px_-10px_rgba(234,88,12,.55)] hover:shadow-[0_18px_38px_-10px_rgba(234,88,12,.7)] hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply border border-ink-line bg-white text-ink shadow-sm hover:border-slate-300 hover:bg-slate-50;
+  }
+  .btn-md { @apply px-5 py-2.5 text-[14px]; }
+  .btn-lg { @apply px-6 py-3.5 text-[15px]; }
+  .btn-sm { @apply px-3 py-1.5 text-[12.5px]; }
+  .input {
+    @apply w-full rounded-xl border border-ink-line bg-white px-4 py-3 text-[14.5px] text-ink shadow-sm outline-none transition focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+  }
+  .label { @apply mb-1.5 block text-[12.5px] font-semibold text-ink-body; }
+  .card { @apply rounded-2xl border border-ink-line bg-white shadow-card; }
+  .card-hover { @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-cardHover hover:border-slate-200; }
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ring-1;
+  }
+  .badge-brand { @apply bg-brand-50 text-brand-700 ring-brand-500/20; }
+  .badge-slate { @apply bg-slate-100 text-slate-600 ring-slate-300/40; }
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-700;
+  }
+}
+
+/* Rich HTML rendered from topic overviews / concept descriptions */
+.topic-prose p { margin-top: 0.75em; margin-bottom: 0.75em; }
+.topic-prose p:first-child { margin-top: 0; }
+.topic-prose strong { color: #0F172A; font-weight: 700; }
+.topic-prose em { font-style: italic; }
+.topic-prose ul { list-style: disc; padding-left: 1.25rem; margin: 0.75em 0; }
+.topic-prose ol { list-style: decimal; padding-left: 1.25rem; margin: 0.75em 0; }
+.topic-prose li { margin: 0.25em 0; }
+.topic-prose code { background: #F1F5F9; padding: 0.1em 0.4em; border-radius: 0.25rem; font-size: 0.9em; }
+
+/* Study guide readability improvements */
+.study-guide-doc .guide-topic {
+  background: #fff;
+}
+.study-guide-doc .guide-body {
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+}
+.study-guide-doc .guide-diagram-item svg {
+  max-height: 360px;
+}
+.study-guide-doc .guide-diagram-item table {
+  font-size: 12px;
+}
+.study-guide-doc .guide-grid ul li {
+  line-height: 1.45;
+}
+.print-only { display: none; }
+.print-candidate .input {
+  width: 100%;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  aside, header { display: none !important; }
+  main {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+  .wrap {
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .card {
+    box-shadow: none !important;
+  }
+  .print-guide-toc {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 12mm;
+  }
+  .print-guide-topic {
+    break-before: page;
+    page-break-before: always;
+  }
+  .print-guide-topic:first-of-type {
+    break-before: auto;
+    page-break-before: auto;
+  }
+  .study-guide-doc {
+    font-size: 11.5pt;
+    color: #111827;
+  }
+  .study-guide-doc h1 { font-size: 22pt !important; }
+  .study-guide-doc h2 { font-size: 15pt !important; }
+  .study-guide-doc h3 { font-size: 12pt !important; }
+  .study-guide-doc .guide-body {
+    background: #fff !important;
+    padding: 0 !important;
+  }
+  .study-guide-doc .guide-topic {
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .study-guide-doc .guide-topic > .border-b {
+    margin-bottom: 8mm;
+  }
+  .study-guide-doc .topic-prose {
+    font-size: 10.5pt !important;
+    line-height: 1.5 !important;
+    border: 1px solid #d1d5db !important;
+    background: #fff !important;
+    padding: 3mm !important;
+  }
+  .study-guide-doc .guide-visuals .card,
+  .study-guide-doc .guide-diagrams .guide-diagram-item {
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .study-guide-doc .guide-diagram-item svg {
+    max-height: 120mm !important;
+    width: 100% !important;
+  }
+  .study-guide-doc .guide-diagram-item table {
+    font-size: 9.5pt !important;
+  }
+  .study-guide-doc .guide-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 4mm !important;
+  }
+  .study-guide-doc .guide-grid > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .study-guide-doc .print-cover {
+    min-height: 90vh;
+    break-after: page;
+    page-break-after: always;
+    border: none !important;
+    padding-top: 20mm !important;
+  }
+  .study-guide-doc .print-cover img {
+    width: 13mm !important;
+    height: 13mm !important;
+  }
+  .study-guide-doc .print-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #cbd5e1;
+    padding: 2.5mm 8mm;
+    font-size: 9pt;
+    color: #475569;
+    background: #fff;
+    z-index: 9999;
+  }
+  .study-guide-doc .print-footer::before {
+    content: "IntelliCert Domain Study Guide";
+    float: left;
+  }
+  .study-guide-doc .print-footer::after {
+    content: "Page " counter(page);
+    float: right;
+  }
+  @page {
+    size: A4;
+    margin: 14mm 10mm 16mm 10mm;
+  }
+  .study-guide-doc code {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+  }
+}

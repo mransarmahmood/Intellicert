@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "csp-app",
+      "runtimeExecutable": "C:\\xampp1\\php\\php.exe",
+      "runtimeArgs": ["-S", "localhost:8080", "-t", "C:\\xampp\\htdocs\\visuallearn", "C:\\xampp\\htdocs\\visuallearn\\.claude\\router.php"],
+      "port": 8080
+    }
+  ]
+}

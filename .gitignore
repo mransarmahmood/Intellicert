@@ -1,0 +1,20 @@
+# Production deploy bundle output
+/dist/
+
+# Per-app dependency dirs
+node_modules/
+
+# Local IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local env overrides
+.env
+.env.local
+*.env.backup
+
+# Vite caches
+*.tsbuildinfo
+.vite/
