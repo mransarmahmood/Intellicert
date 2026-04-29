@@ -30,6 +30,14 @@ echo "→ 2/5 Switching to production branch…"
 git checkout production
 
 echo "→ 3/5 Replacing artifacts…"
+# Stage the freshly-built bundle OUTSIDE the worktree first. The find
+# below removes everything in the repo root that isn't whitelisted —
+# including dist/ — so we must copy out before wiping.
+STAGE="$(mktemp -d)"
+trap 'rm -rf "$STAGE"' EXIT
+cp -r dist/public_html "$STAGE/public_html"
+cp -r dist/backend-app "$STAGE/backend-app"
+
 # Wipe everything except .git, DEPLOY.md, .gitignore, and the freshly-built
 # folders we're about to drop in.
 find . -mindepth 1 -maxdepth 1 \
@@ -40,8 +48,8 @@ find . -mindepth 1 -maxdepth 1 \
   ! -name 'backend-app' \
   -exec rm -rf {} +
 rm -rf public_html backend-app
-cp -r dist/public_html .
-cp -r dist/backend-app .
+cp -r "$STAGE/public_html" .
+cp -r "$STAGE/backend-app" .
 
 echo "→ 4/5 Committing…"
 git add -A
