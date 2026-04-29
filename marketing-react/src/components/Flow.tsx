@@ -1,77 +1,121 @@
-import SectionHead from './SectionHead';
-import Reveal from './Reveal';
-import {
-  Zap,
-  HelpCircle,
-  BookOpen,
-  Workflow,
-  Lightbulb,
-  Brain,
-  RotateCw,
-  FlaskConical,
-  GraduationCap,
-  Flag,
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Compass, Sparkles, Brain, Trophy, ArrowRight } from 'lucide-react';
+import Badge from './ui/Badge';
+import { fadeUp, stagger, inViewOnce, easeStandard } from '../lib/motion';
+
+/**
+ * How It Works — 4-step horizontal timeline.
+ * Connected line with animated progress dot.
+ *
+ * On large screens: horizontal layout with the line spanning all 4 cards.
+ * On mobile: vertical stack (the line goes from top to bottom).
+ */
 
 const steps = [
-  { n: '01', icon: Zap, title: 'Hook', desc: 'Curiosity trigger that primes your brain to pay attention.' },
-  { n: '02', icon: HelpCircle, title: 'Try First', desc: 'Attempt before you learn — even wrong guesses boost retention.' },
-  { n: '03', icon: BookOpen, title: 'Core', desc: 'Chunked micro-lessons designed around working memory limits.' },
-  { n: '04', icon: Workflow, title: 'Visual', desc: 'Infographics and diagrams that encode concepts dual-channel.' },
-  { n: '05', icon: Lightbulb, title: 'Example', desc: 'Real-world scenarios that build transferable mental models.' },
-  { n: '06', icon: Brain, title: 'Memory', desc: 'Mnemonics and anchors to lock concepts into long-term storage.' },
-  { n: '07', icon: RotateCw, title: 'Recall', desc: 'Retrieval practice — the single most powerful learning tool.' },
-  { n: '08', icon: FlaskConical, title: 'Apply', desc: 'Scenario-based decision trees that simulate real exam questions.' },
-  { n: '09', icon: GraduationCap, title: 'Teach', desc: "Feynman-mode teach-back reveals what you don't quite know yet." },
-  { n: '10', icon: Flag, title: 'Summary', desc: '3-bullet recap plus next spaced-review automatically scheduled.' },
+  {
+    icon: Compass,
+    title: 'Diagnostic',
+    body: '15-minute assessment maps your weak nodes across all 7 CSP domains.',
+    timing: 'Day 1',
+  },
+  {
+    icon: Sparkles,
+    title: 'Personalized Plan',
+    body: 'Adaptive schedule built from your gaps, exam date, and available study time.',
+    timing: 'Day 1',
+  },
+  {
+    icon: Brain,
+    title: 'Daily Brain Sessions',
+    body: '20–30 minute sessions: spaced reps, scenario quizzes, voice-mode commute review.',
+    timing: 'Day 2 – exam',
+  },
+  {
+    icon: Trophy,
+    title: 'Exam-Ready',
+    body: 'Full simulation, confusion map cleared, mastery threshold passed in every domain.',
+    timing: 'Exam day',
+  },
 ];
 
 export default function Flow() {
   return (
-    <section id="flow" className="relative py-28">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-slate-200/60" />
-      <div className="mx-auto w-full max-w-[1320px] px-6 sm:px-10">
-        <SectionHead
-          eyebrow="The Learning Flow"
-          title="10 steps. One mastered concept."
-          desc="Each concept is reinforced through a structured learning loop — similar to how top CSP preparation systems combine theory, practice, and application."
-        />
+    <section id="flow" className="relative py-24 sm:py-32">
+      <div className="wrap">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={inViewOnce}
+          className="mx-auto max-w-2xl text-center"
+        >
+          <Badge variant="brand" icon={<Compass size={11} aria-hidden="true" />}>
+            How It Works
+          </Badge>
+          <h2 className="mt-4 font-display text-5xl font-extrabold text-ink">
+            Diagnostic to{' '}
+            <span className="editorial text-brand-600">exam-ready confidence.</span>
+          </h2>
+          <p className="mt-5 text-lg text-ink-body">
+            Four phases, each calibrated to where your brain currently sits and
+            where it needs to be on exam day.
+          </p>
+        </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {steps.map((s, i) => (
-            <Reveal key={s.n} delay={(i % 5) * 0.05}>
-              <div className="group relative h-full">
-                {/* Gradient border wrapper */}
-                <div className="absolute -inset-px rounded-2xl bg-brand-400/20 opacity-60 blur transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="relative h-full overflow-hidden rounded-2xl border border-ink-line bg-white p-6 shadow-card transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-cardHover">
-                  {/* Top accent bar that animates in */}
-                  <div className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-brand-600 transition-transform duration-500 group-hover:scale-x-100" />
+        {/* Timeline */}
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={inViewOnce}
+          className="relative mt-16"
+        >
+          {/* Connector line — desktop only (horizontal) */}
+          <div
+            aria-hidden="true"
+            className="absolute left-[10%] right-[10%] top-12 hidden h-px lg:block"
+          >
+            <div className="h-full w-full bg-ink-line" />
+            <motion.div
+              initial={{ scaleX: 0, originX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.6, ease: easeStandard, delay: 0.2 }}
+              className="absolute inset-0 h-full w-full bg-gradient-to-r from-brand-500 via-amber-500 to-success-500"
+            />
+          </div>
 
-                  {/* Step number chip */}
-                  <div className="absolute right-4 top-4 rounded-full bg-surface px-2.5 py-0.5 font-display text-[10px] font-bold text-ink-dim ring-1 ring-ink-line">
-                    Step {s.n}
-                  </div>
-
-                  {/* Icon — gradient tile + glow */}
-                  <div className="relative mb-5 inline-block">
-                    <div className="absolute inset-0 rounded-2xl bg-brand-500/30 blur-xl transition-all duration-500 group-hover:bg-brand-500/50 group-hover:blur-2xl" />
-                    <div className="relative grid h-14 w-14 place-items-center rounded-2xl bg-brand-600 text-white shadow-[0_10px_25px_-8px_rgba(234,88,12,.55)] ring-1 ring-white/40 transition-transform duration-500 group-hover:rotate-6 group-hover:scale-105">
-                      <s.icon size={22} strokeWidth={2.25} />
+          <div className="grid gap-6 lg:grid-cols-4">
+            {steps.map((s, i) => {
+              const Icon = s.icon;
+              return (
+                <motion.div key={i} variants={fadeUp} className="relative">
+                  <div className="relative z-10 mb-6 mx-auto grid h-24 w-24 place-items-center rounded-2xl bg-white shadow-cardHover ring-1 ring-ink-line">
+                    <div className="grid h-16 w-16 place-items-center rounded-xl bg-gradient-to-br from-brand-500 to-amber-500 text-white shadow-glowSoft">
+                      <Icon size={24} aria-hidden="true" strokeWidth={1.75} />
                     </div>
                   </div>
 
-                  <h4 className="font-display text-[17px] font-bold text-ink">{s.title}</h4>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-body">{s.desc}</p>
+                  <div className="rounded-2xl border border-ink-line bg-white p-6 text-center shadow-card">
+                    <div className="text-2xs font-bold uppercase tracking-wider text-brand-600">
+                      Step {i + 1} · {s.timing}
+                    </div>
+                    <h3 className="mt-2 font-display text-xl font-bold text-ink">
+                      {s.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-ink-body">{s.body}</p>
+                  </div>
 
-                  {/* Decorative corner gradient */}
-                  <div
-                    className="pointer-events-none absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-brand-500/8 blur-2xl transition-opacity duration-500 opacity-0 group-hover:opacity-100"
-                  />
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+                  {i < steps.length - 1 && (
+                    <div aria-hidden="true" className="my-4 flex items-center justify-center lg:hidden">
+                      <ArrowRight className="rotate-90 text-ink-muted" size={18} />
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

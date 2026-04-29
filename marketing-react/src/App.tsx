@@ -3,12 +3,11 @@ import AnnouncementBar from './components/AnnouncementBar';
 import Nav from './components/Nav';
 import Hero from './components/Hero';
 import Marquee from './components/Marquee';
-import Certifications from './components/Certifications';
-import Science from './components/Science';
+import Method from './components/Method';
+import ProductPreview from './components/ProductPreview';
+import Stats from './components/Stats';
 import Flow from './components/Flow';
 import Features from './components/Features';
-import PrepMethods from './components/PrepMethods';
-import Domains from './components/Domains';
 import Testimonials from './components/Testimonials';
 import Pricing from './components/Pricing';
 import FAQ from './components/FAQ';
@@ -34,19 +33,16 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen overflow-x-clip bg-surface">
-      {/* Soft ambient mesh */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[900px] bg-mesh-light" />
       <AnnouncementBar />
-      <div className="relative z-10 pt-10">
+      <div className="relative z-10">
         <Nav />
         <Hero />
         <Marquee />
-        <Certifications />
-        <Science />
+        <Method />
+        <ProductPreview />
+        <Stats />
         <Flow />
         <Features />
-        <PrepMethods />
-        <Domains />
         <Testimonials />
         <Pricing />
         <FAQ />

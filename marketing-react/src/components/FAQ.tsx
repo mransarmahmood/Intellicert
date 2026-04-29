@@ -1,84 +1,94 @@
-import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
-import SectionHead from './SectionHead';
+import { motion } from 'framer-motion';
+import { HelpCircle } from 'lucide-react';
+import Accordion, { AccordionItem } from './ui/Accordion';
+import Badge from './ui/Badge';
+import { fadeUp, inViewOnce } from '../lib/motion';
 
 const faqs = [
   {
-    q: 'How is this different from Quizlet or a textbook?',
-    a: 'Traditional resources provide information. IntelliCert provides a structured learning system that combines explanation, practice, and memory reinforcement — helping you understand concepts and apply them in exam scenarios.',
+    id: 'q1',
+    q: 'How is this different from Quizlet, Anki, or a textbook?',
+    a: 'Traditional resources provide information. IntelliCert provides a structured retrieval system: every fact you encounter enters a spaced-repetition schedule, every weak node gets a custom AI explanation, and every diagram becomes an image-occlusion card. Information is the input — retention is the output.',
   },
   {
+    id: 'q2',
     q: 'How long does it take to prepare for the CSP?',
-    a: "Most candidates study 3–6 months. Because IntelliCert is built on spaced repetition, you'll spend less total time and retain more. The 6-month plan is sized for a comfortable, complete preparation with room to spare.",
+    a: 'Most candidates study 3–6 months. Because IntelliCert is built on spaced repetition, you spend less total time and retain more. The 6-month plan is sized for a comfortable, complete preparation with buffer for review.',
   },
   {
-    q: 'What happens if I fail the exam?',
-    a: "You get free access until you pass — no questions asked. If you've completed the curriculum and didn't pass, we extend your account at no cost. We built this platform to get you to a pass, and we stand behind it.",
+    id: 'q3',
+    q: "What happens if I don't pass the exam?",
+    a: "You get free access until you pass — no questions asked. If you complete the curriculum and don't clear the exam, we extend your account at no cost. We built this platform to deliver a pass and we stand behind it.",
   },
   {
+    id: 'q4',
+    q: 'Which certifications are covered?',
+    a: 'CSP (primary focus), ASP, OHST, CHST, and CIH share content under the BCSP and ABIH blueprints. The Pro+ Mastery tier unlocks all five certifications. Pro tier covers CSP only.',
+  },
+  {
+    id: 'q5',
     q: 'Can I cancel anytime?',
-    a: 'Yes. Cancel from your dashboard in one click. No retention calls, no dark patterns. Your access continues until the end of your current billing period.',
+    a: 'Yes. Cancel from your dashboard in one click. No retention calls, no dark patterns. Your access continues until the end of your current billing period — and the 7-day money-back applies if you change your mind in the first week.',
   },
   {
-    q: 'Does it work on mobile?',
-    a: 'Yes — IntelliCert is a responsive web app that works on phone, tablet, and desktop. Install it to your home screen for an app-like experience with offline flashcards.',
+    id: 'q6',
+    q: 'Does it work on mobile and offline?',
+    a: 'Yes — responsive on phone, tablet, and desktop. Install it to your home screen for an app-like experience. Voice Mode is designed specifically for commute use.',
   },
   {
-    q: 'Who writes the content?',
-    a: 'Content is curated and verified by practicing CSPs and reviewed against the BCSP exam blueprint. Every formula, regulation, and calculation is source-checked to eliminate the kinds of errors that plague free resources.',
+    id: 'q7',
+    q: 'Who writes and reviews the content?',
+    a: 'Content is curated by practicing CSPs and reviewed against the BCSP exam blueprint (CSP11). Every formula, regulation, and calculation is verified against the cited primary source — OSHA 29 CFR, NIOSH, ACGIH TLVs, ANSI/ASSP standards. Mastery topics carry an additional 12-point defensibility checklist.',
   },
   {
-    q: 'What does a strong CSP preparation system include?',
-    a: 'Effective CSP preparation typically includes structured study content, practice questions, review tools, and progress tracking. IntelliCert integrates all of these into one platform with additional learning optimization features.',
+    id: 'q8',
+    q: 'Is my data private?',
+    a: 'Your study data is yours. We never sell or share learner data. Voice transcriptions are processed with on-device speech recognition where possible and never stored. Authentication is token-based; no third-party tracking on the marketing site.',
   },
 ];
 
 export default function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
   return (
-    <section className="relative py-28">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-36 bg-slate-200/60" />
-      <div className="mx-auto w-full max-w-[1320px] px-6 sm:px-10">
-        <SectionHead eyebrow="FAQ" title="Questions, answered." />
-        <div className="mx-auto max-w-3xl space-y-3">
-          {faqs.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <div
-                key={f.q}
-                className={`overflow-hidden rounded-2xl border bg-white shadow-card transition-colors ${
-                  isOpen ? 'border-brand-500/30' : 'border-ink-line hover:border-slate-300'
-                }`}
-              >
-                <button
-                  onClick={() => setOpen(isOpen ? null : i)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 px-6 py-5 text-left text-[15px] font-semibold text-ink"
-                >
-                  {f.q}
-                  <ChevronDown
-                    size={18}
-                    className={`shrink-0 text-brand-600 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                      <div className="px-6 pb-5 text-[14px] leading-relaxed text-ink-body">{f.a}</div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            );
-          })}
-        </div>
+    <section id="faq" className="relative py-24 sm:py-32">
+      <div className="wrap">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={inViewOnce}
+          className="mx-auto max-w-2xl text-center"
+        >
+          <Badge variant="brand" icon={<HelpCircle size={11} aria-hidden="true" />}>
+            FAQ
+          </Badge>
+          <h2 className="mt-4 font-display text-5xl font-extrabold text-ink">
+            Questions, answered{' '}
+            <span className="editorial text-brand-600">honestly.</span>
+          </h2>
+          <p className="mt-5 text-lg text-ink-body">
+            If your question isn't here, write to{' '}
+            <a href="mailto:hello@intellicert.co.uk" className="font-semibold text-brand-600 underline-offset-2 hover:underline">
+              hello@intellicert.co.uk
+            </a>
+            . We respond within one business day.
+          </p>
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={inViewOnce}
+          className="mx-auto mt-12 max-w-3xl"
+        >
+          <Accordion type="single" defaultValue="q1">
+            {faqs.map((f) => (
+              <AccordionItem key={f.id} id={f.id} question={f.q}>
+                <p>{f.a}</p>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </motion.div>
       </div>
     </section>
   );
