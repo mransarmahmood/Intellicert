@@ -1,308 +1,358 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Rocket, Play, Check, Brain, BookOpen, Layers, HelpCircle, GraduationCap, Zap, Timer, ShieldCheck, LineChart, Shield } from 'lucide-react';
-import AnimatedStats from './AnimatedStats';
-import { IMAGES } from '../assets/images';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import {
+  ArrowRight, Play, Star, Brain, Layers, BarChart3,
+  Zap, BookOpen, GraduationCap, Sparkles, ShieldCheck, Target,
+} from 'lucide-react';
+import Button from './ui/Button';
+import Badge from './ui/Badge';
+import GradientOrb from './effects/GradientOrb';
+import NeuralMesh from './effects/NeuralMesh';
+import CountUp from './effects/CountUp';
+import { heroReveal, heroChild, easeStandard, dur } from '../lib/motion';
 
-const sideItems = [
-  { icon: Brain, label: 'Dashboard', active: true },
-  { icon: BookOpen, label: 'Study' },
-  { icon: Layers, label: 'Flashcards' },
-  { icon: HelpCircle, label: 'Quizzes' },
-  { icon: GraduationCap, label: 'Feynman' },
-  { icon: Zap, label: 'Focus Mode' },
-];
-
-const stats = [
-  { label: 'Memory Strength', value: '87%', bar: 87 },
-  { label: 'Due for Review', value: '12', bar: 35 },
-  { label: 'Domain Mastery', value: '74%', bar: 74 },
-  { label: 'Streak', value: '14d', bar: 90 },
-];
-
+// Mockup carousel content
 const slides = [
   {
-    id: 1,
-    title: 'Guided Learning Dashboard',
-    subtitle: 'Domain 3 - Risk Management',
+    id: 'study',
+    chip: 'Today',
+    chipIcon: Brain,
+    title: 'Domain 2 · Risk Management',
+    sub:   'Active recall · 12 cards due',
     badge: '+23% recall rate',
-    accent: 'bg-brand-500/20',
+    accent: 'from-brand-500/30 to-amber-500/15',
+    metric: { label: 'Memory Strength', value: 87, suffix: '%' },
+    secondary: { label: 'Streak', value: 14, suffix: 'd' },
   },
   {
-    id: 2,
-    title: 'Timed Exam Simulation',
-    subtitle: '200-question mock exam mode',
-    badge: '5h 30m simulation',
-    accent: 'bg-indigo-500/20',
+    id: 'sim',
+    chip: 'Exam',
+    chipIcon: GraduationCap,
+    title: 'Full Simulation Mode',
+    sub:   '200 items · 5h 30m · BCSP-rules',
+    badge: 'Locked nav after item 25',
+    accent: 'from-amber-500/25 to-brand-500/15',
+    metric: { label: 'Pass Probability', value: 78, suffix: '%' },
+    secondary: { label: 'Last attempt', value: 72, suffix: '%' },
   },
   {
-    id: 3,
-    title: 'Performance Breakdown',
-    subtitle: 'Weakest domains identified automatically',
-    badge: 'AI improvement tips',
-    accent: 'bg-emerald-500/20',
+    id: 'feyn',
+    chip: 'AI',
+    chipIcon: Sparkles,
+    title: 'Feynman Teach-Back',
+    sub:   'Explain it. Get graded. Find the gaps.',
+    badge: 'Powered by your weak nodes',
+    accent: 'from-success-500/25 to-amber-500/15',
+    metric: { label: 'Domain Mastery', value: 74, suffix: '%' },
+    secondary: { label: 'Confusion map', value: 9, suffix: ' tagged' },
   },
+] as const;
+
+const navItems = [
+  { icon: Brain,        label: 'Dashboard',   active: true },
+  { icon: BookOpen,     label: 'Study' },
+  { icon: Layers,       label: 'Flashcards' },
+  { icon: GraduationCap, label: 'Feynman' },
+  { icon: Zap,          label: 'Focus' },
+  { icon: BarChart3,    label: 'Stats' },
 ];
 
 export default function Hero() {
-  const [activeSlide, setActiveSlide] = useState(0);
+  const [active, setActive] = useState(0);
+  const reduced = useReducedMotion();
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % slides.length);
-    }, 3800);
-    return () => window.clearInterval(timer);
-  }, []);
+    if (reduced) return;
+    const t = window.setInterval(() => setActive((i) => (i + 1) % slides.length), 4200);
+    return () => window.clearInterval(t);
+  }, [reduced]);
+
+  const slide = slides[active];
 
   return (
-    <section className="relative overflow-hidden pb-24 pt-56 sm:pt-64">
-      {/* Real safety-professional photo background with soft surface veil */}
-      <div className="pointer-events-none absolute inset-0 -z-[1]">
-        <img
-          src={IMAGES.HERO_BG}
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover opacity-[0.14]"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'linear-gradient(to bottom, rgba(250,250,249,0.7), rgba(250,250,249,0.9) 60%, #FAFAF9)',
-          }}
-        />
+    <section className="relative overflow-hidden bg-grad-hero text-white">
+      {/* Ambient orbs */}
+      <GradientOrb size={620} color="brand-500" className="-left-20 -top-32" duration={16} blur={120} opacity={0.35} />
+      <GradientOrb size={480} color="navy-500" className="-right-24 top-40" duration={20} blur={100} opacity={0.5} />
+      <GradientOrb size={520} color="amber-500" className="bottom-0 left-1/2 -translate-x-1/2" duration={18} blur={140} opacity={0.18} />
+
+      {/* Neural mesh — restrained, just enough to hint at "brain-based" */}
+      <div className="absolute inset-0 opacity-40">
+        <NeuralMesh variant="dark" />
       </div>
-      {/* Animated background grid */}
+
+      {/* Subtle grid noise */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            'linear-gradient(to right, rgba(15,23,42,.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,.06) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-          maskImage: 'radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%)',
+            'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+          maskImage: 'radial-gradient(ellipse 800px 600px at 50% 30%, #000 30%, transparent 80%)',
         }}
       />
-      {/* Floating gradient orbs */}
-      <motion.div
-        animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -left-20 top-40 h-72 w-72 rounded-full bg-brand-400/30 blur-3xl"
-      />
-      <motion.div
-        animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-20 top-32 h-96 w-96 rounded-full bg-blue-300/20 blur-3xl"
-      />
 
-      <div className="relative wrap text-center">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto inline-flex items-center gap-2 rounded-full border border-ink-line bg-white px-4 py-1.5 text-[12px] font-medium text-ink-body shadow-sm"
-        >
-          <Shield size={13} className="text-brand-600" />
-          Trusted by 15,000+ safety professionals preparing for BCSP &amp; ABIH exams
-        </motion.div>
+      <div className="wrap relative pb-24 pt-40 sm:pb-32 sm:pt-44">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr,0.95fr] lg:gap-16">
+          {/* ─── Left: Editorial copy ─── */}
+          <motion.div
+            variants={heroReveal}
+            initial="hidden"
+            animate="show"
+            className="relative"
+          >
+            <motion.div variants={heroChild}>
+              <Badge variant="glass" icon={<Sparkles size={12} aria-hidden="true" />}>
+                Brain-Based Learning · CSP / ASP / CIH
+              </Badge>
+            </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.05 }}
-          className="mx-auto mt-7 max-w-4xl font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-ink sm:text-6xl md:text-7xl"
-        >
-          Pass your safety exam <br className="hidden sm:block" />
-          with a{' '}
-          <span className="relative inline-block">
-            <span className="text-brand-600">
-              smarter way to learn
-            </span>
-            <svg viewBox="0 0 300 12" className="absolute -bottom-2 left-0 w-full text-brand-500/70" fill="none">
-              <path d="M2 6 Q 75 0, 150 6 T 298 6" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-          </span>
-        </motion.h1>
+            <motion.h1
+              variants={heroChild}
+              className="mt-5 font-display text-hero font-extrabold tracking-tightest text-white"
+            >
+              Pass the CSP.
+              <br />
+              Powered by{' '}
+              <span className="editorial text-amber-400">how your brain actually learns.</span>
+            </motion.h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15 }}
-          className="mx-auto mt-7 max-w-2xl text-[17px] leading-relaxed text-ink-body"
-        >
-          IntelliCert transforms CSP, ASP, OHST, CHST, CIH, SMS, and STS exam blueprints into a structured, brain-based
-          learning system powered by spaced repetition, active recall, and real-world safety application. Study less.
-          Remember more. Pass with confidence.
-        </motion.p>
-        <p className="mx-auto mt-3 max-w-2xl text-[14px] font-semibold uppercase tracking-wide text-ink-dim">
-          7 BCSP &amp; ABIH credentials • 2,000+ practice questions • Full blueprint coverage
-        </p>
+            <motion.p
+              variants={heroChild}
+              className="mt-6 max-w-xl text-lg text-white/75"
+            >
+              Active recall. Spaced repetition. AI voice tutoring. Built by safety
+              professionals, engineered on the cognitive science that makes hard
+              material stick.
+            </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25 }}
-          className="mt-9 flex flex-wrap items-center justify-center gap-3"
-        >
-          <a href="/app/login" className="btn btn-primary btn-lg">
-            <Rocket size={18} /> Open Learning App
-          </a>
-          <a href="#flow" className="btn btn-ghost btn-lg">
-            <Play size={16} /> See How It Works
-          </a>
-        </motion.div>
+            <motion.div variants={heroChild} className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="/app/register">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  shimmer
+                  trailingIcon={<ArrowRight size={16} aria-hidden="true" />}
+                >
+                  Start Free Trial
+                </Button>
+              </a>
+              <a href="#method">
+                <Button
+                  variant="ghost-dark"
+                  size="lg"
+                  leadingIcon={<Play size={14} aria-hidden="true" />}
+                >
+                  See the Method
+                </Button>
+              </a>
+            </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px] text-ink-dim"
-        >
-          {['3-day free trial', 'Pass guarantee', 'Cancel anytime'].map((t) => (
-            <span key={t} className="inline-flex items-center gap-1.5">
-              <Check size={14} className="text-brand-600" /> {t}
-            </span>
-          ))}
-        </motion.div>
-
-        {/* Animated stats counter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5 }}
-          className="mx-auto mt-14 max-w-4xl"
-        >
-          <AnimatedStats />
-        </motion.div>
-
-        {/* Full-width animated showcase */}
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mt-20 w-screen left-1/2 right-1/2 -mx-[50vw]"
-        >
-          <div className="absolute -inset-x-20 -top-12 -bottom-12 -z-10 rounded-[4rem] bg-brand-400/15 blur-3xl" />
-
-          <div className="mx-auto w-full max-w-[1320px] px-6 sm:px-10">
-            <div className="relative overflow-hidden rounded-3xl border border-navy-700 bg-navy-900 p-2 shadow-[0_55px_120px_-30px_rgba(15,23,42,.55)] ring-1 ring-black/20">
-              <div className="flex items-center justify-between border-b border-white/5 px-5 py-3">
-                <div className="flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-yellow-500/70" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-green-500/70" />
-                </div>
-                <div className="flex items-center gap-2 text-[11px] text-slate-400">
-                  <Timer size={12} /> Live product preview
-                </div>
-              </div>
-
-              <div className="relative grid min-h-[430px] grid-cols-1 lg:grid-cols-[210px_1fr]">
-                <aside className="hidden border-r border-white/5 p-4 lg:block">
-                  {sideItems.map((it) => (
-                    <div
-                      key={it.label}
-                      className={`mb-1 flex items-center gap-2.5 rounded-lg px-3 py-2 text-[12px] font-medium transition-colors ${
-                        it.active ? 'bg-brand-600/15 text-brand-400' : 'text-slate-400 hover:bg-white/5'
-                      }`}
-                    >
-                      <it.icon size={14} /> {it.label}
-                    </div>
+            <motion.div
+              variants={heroChild}
+              className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 text-sm text-white/60"
+            >
+              <div className="flex items-center gap-2">
+                <div className="flex">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <Star key={i} size={14} className="fill-amber-400 text-amber-400" aria-hidden="true" />
                   ))}
-                </aside>
-
-                <div className="relative p-6 text-left md:p-8">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={slides[activeSlide].id}
-                      initial={{ opacity: 0, x: 24 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -24 }}
-                      transition={{ duration: 0.55, ease: 'easeOut' }}
-                      className="space-y-5"
-                    >
-                      <div className={`absolute right-6 top-6 h-24 w-40 rounded-2xl ${slides[activeSlide].accent} blur-2xl`} />
-                      <div>
-                        <div className="font-display text-[22px] font-bold text-white">{slides[activeSlide].title}</div>
-                        <div className="mt-1 text-[12px] text-slate-400">{slides[activeSlide].subtitle}</div>
-                      </div>
-                      <div>
-                        <div className="mb-2 text-[10px] font-bold uppercase tracking-wider text-brand-400">
-                          <Brain className="mr-1 inline" size={11} /> Brain-Based Learning Path - 7 / 10
-                        </div>
-                        <div className="flex gap-1.5">
-                          {Array.from({ length: 10 }).map((_, i) => (
-                            <div
-                              key={i}
-                              className={`h-1.5 flex-1 rounded-full ${
-                                i < 7 ? 'bg-brand-500' : 'bg-white/10'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-3 xl:grid-cols-4">
-                        {stats.map((s) => (
-                          <div key={s.label} className="rounded-xl border border-white/10 bg-white/[.03] p-3.5">
-                            <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">{s.label}</div>
-                            <div className="mt-1.5 font-display text-2xl font-bold text-white">{s.value}</div>
-                            <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-white/5">
-                              <div className="h-full rounded-full bg-brand-500" style={{ width: `${s.bar}%` }} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="grid gap-3 md:grid-cols-3">
-                        <div className="rounded-xl border border-white/10 bg-white/[.03] p-3 text-slate-200">
-                          <div className="mb-1 flex items-center gap-2 text-[12px] font-semibold"><ShieldCheck size={14} className="text-emerald-400" /> Exam readiness</div>
-                          <p className="text-[12px] text-slate-400">Targeted domain review with progress checkpoints.</p>
-                        </div>
-                        <div className="rounded-xl border border-white/10 bg-white/[.03] p-3 text-slate-200">
-                          <div className="mb-1 flex items-center gap-2 text-[12px] font-semibold"><LineChart size={14} className="text-blue-400" /> Performance trends</div>
-                          <p className="text-[12px] text-slate-400">Score trajectory and retention curve visibility.</p>
-                        </div>
-                        <div className="rounded-xl border border-white/10 bg-white/[.03] p-3 text-slate-200">
-                          <div className="mb-1 flex items-center gap-2 text-[12px] font-semibold"><Timer size={14} className="text-brand-400" /> Practice rhythm</div>
-                          <p className="text-[12px] text-slate-400">Smart schedule adapts to your available time.</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
                 </div>
+                <span><span className="font-mono text-white">4.9</span> avg rating</span>
               </div>
-
-              <div className="flex items-center justify-center gap-2 border-t border-white/5 px-4 py-3">
-                {slides.map((slide, i) => (
-                  <button
-                    key={slide.id}
-                    type="button"
-                    aria-label={`Show slide ${i + 1}`}
-                    onClick={() => setActiveSlide(i)}
-                    className={`h-2.5 rounded-full transition-all ${i === activeSlide ? 'w-8 bg-brand-500' : 'w-2.5 bg-white/30 hover:bg-white/50'}`}
-                  />
-                ))}
+              <div className="flex items-center gap-2">
+                <ShieldCheck size={14} className="text-success-500" aria-hidden="true" />
+                <span><span className="font-mono text-white">94%</span> first-attempt pass</span>
               </div>
-            </div>
-          </div>
+              <div className="flex items-center gap-2">
+                <Target size={14} className="text-brand-400" aria-hidden="true" />
+                <span><CountUp to={12000} suffix="+" className="text-white" /> safety pros</span>
+              </div>
+            </motion.div>
+          </motion.div>
 
+          {/* ─── Right: Floating product mockup ─── */}
           <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute left-3 top-1/3 hidden items-center gap-2 rounded-xl border border-ink-line bg-white px-3.5 py-2 text-[12px] font-semibold text-ink shadow-card xl:inline-flex"
+            variants={heroChild}
+            initial="hidden"
+            animate="show"
+            transition={{ duration: dur.hero, delay: 0.4, ease: easeStandard }}
+            className="relative mx-auto w-full max-w-xl lg:ml-auto"
           >
-            <Check size={14} className="text-green-500" /> {slides[activeSlide].badge}
+            <HeroMockup slide={slide} navItems={navItems} active={active} setActive={setActive} />
           </motion.div>
-          <motion.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
-            className="absolute right-3 top-2/3 hidden items-center gap-2 rounded-xl border border-ink-line bg-white px-3.5 py-2 text-[12px] font-semibold text-ink shadow-card xl:inline-flex"
-          >
-            <Zap size={14} className="text-brand-600" /> 3 reviews due
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Floating mockup card — glass-dark surface with realistic chrome,
+// auto-rotating slide content, and 3 dot indicators.
+// ─────────────────────────────────────────────────────────────────────
+type HeroMockupProps = {
+  slide: typeof slides[number];
+  navItems: typeof navItems;
+  active: number;
+  setActive: (i: number) => void;
+};
+
+function HeroMockup({ slide, navItems, active, setActive }: HeroMockupProps) {
+  const ChipIcon = slide.chipIcon;
+  return (
+    <div className="relative">
+      {/* Glow under the card */}
+      <div className="absolute -inset-8 -z-10 rounded-3xl bg-brand-500/20 blur-3xl" aria-hidden="true" />
+
+      {/* Card */}
+      <div className="rounded-2xl border border-white/10 bg-navy-950/80 shadow-[0_40px_100px_-40px_rgba(0,0,0,.8)] backdrop-blur-xl">
+        {/* Chrome */}
+        <div className="flex items-center gap-2 border-b border-white/5 px-4 py-3">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-red-400/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
+            <span className="h-2.5 w-2.5 rounded-full bg-success-500/70" />
+          </div>
+          <div className="ml-auto rounded-md bg-white/5 px-3 py-1 text-2xs font-mono text-white/40">
+            intellicert.app/app
+          </div>
+        </div>
+
+        {/* Body */}
+        <div className="grid grid-cols-[120px,1fr] gap-0">
+          {/* Sidebar */}
+          <div className="border-r border-white/5 p-3">
+            <ul className="space-y-1">
+              {navItems.map((item, i) => {
+                const Icon = item.icon;
+                const isActive = item.active;
+                return (
+                  <li key={i}>
+                    <div
+                      className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-medium ${
+                        isActive ? 'bg-brand-600/20 text-brand-400' : 'text-white/40'
+                      }`}
+                    >
+                      <Icon size={12} aria-hidden="true" />
+                      <span>{item.label}</span>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Main */}
+          <div className="relative min-h-[360px] p-5">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: easeStandard }}
+                className="space-y-4"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-pill bg-white/10 px-2.5 py-0.5 text-2xs font-semibold text-white">
+                    <ChipIcon size={10} aria-hidden="true" />
+                    {slide.chip}
+                  </span>
+                  <span className="text-2xs font-semibold text-amber-400">{slide.badge}</span>
+                </div>
+
+                <div>
+                  <h3 className="font-display text-lg font-bold text-white">{slide.title}</h3>
+                  <p className="mt-0.5 text-xs text-white/50">{slide.sub}</p>
+                </div>
+
+                {/* Hero metric */}
+                <div className={`relative overflow-hidden rounded-xl bg-gradient-to-br ${slide.accent} p-4 ring-1 ring-white/10`}>
+                  <div className="text-2xs font-semibold uppercase tracking-widest text-white/60">
+                    {slide.metric.label}
+                  </div>
+                  <div className="mt-1 font-display text-4xl font-extrabold text-white">
+                    <CountUp to={slide.metric.value} suffix={slide.metric.suffix} />
+                  </div>
+                  <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${slide.metric.value}%` }}
+                      transition={{ duration: 1.4, ease: easeStandard, delay: 0.3 }}
+                      className="h-full rounded-full bg-gradient-to-r from-brand-500 to-amber-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Secondary stat row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-lg bg-white/5 p-3 ring-1 ring-white/5">
+                    <div className="text-2xs uppercase tracking-wider text-white/50">{slide.secondary.label}</div>
+                    <div className="mt-0.5 font-mono text-lg font-bold text-white">
+                      <CountUp to={slide.secondary.value} suffix={slide.secondary.suffix} />
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-center rounded-lg bg-white/5 p-3 ring-1 ring-white/5">
+                    <Sparkles size={16} className="text-amber-400" aria-hidden="true" />
+                    <span className="ml-2 text-xs text-white/70">AI Auto-Explainer</span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Slide indicators */}
+        <div className="flex items-center justify-center gap-2 border-t border-white/5 py-3">
+          {slides.map((s, i) => (
+            <button
+              key={s.id}
+              onClick={() => setActive(i)}
+              aria-label={`Show slide ${i + 1}: ${s.title}`}
+              className={`h-1.5 rounded-full transition-all duration-300 ease-ease-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 ${
+                i === active ? 'w-8 bg-brand-500' : 'w-1.5 bg-white/20 hover:bg-white/30'
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Floating accent cards */}
+      <motion.div
+        initial={{ opacity: 0, x: -20, y: 10 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.6, ease: easeStandard }}
+        className="absolute -left-6 top-20 hidden rounded-xl border border-white/10 bg-navy-900/90 p-3 shadow-2xl backdrop-blur-md sm:block animate-float"
+      >
+        <div className="flex items-center gap-2 text-xs">
+          <div className="grid h-7 w-7 place-items-center rounded-md bg-amber-500/20">
+            <Sparkles size={12} className="text-amber-400" aria-hidden="true" />
+          </div>
+          <div>
+            <div className="font-semibold text-white">Mnemonic ready</div>
+            <div className="font-mono text-2xs text-white/50">"HALT" → 4 hazards</div>
+          </div>
+        </div>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, x: 20, y: -10 }}
+        animate={{ opacity: 1, x: 0, y: 0 }}
+        transition={{ delay: 1.4, duration: 0.6, ease: easeStandard }}
+        className="absolute -bottom-4 -right-4 hidden rounded-xl border border-white/10 bg-navy-900/90 p-3 shadow-2xl backdrop-blur-md sm:block animate-float"
+        style={{ animationDelay: '1s' }}
+      >
+        <div className="flex items-center gap-2 text-xs">
+          <div className="grid h-7 w-7 place-items-center rounded-md bg-success-500/20">
+            <ShieldCheck size={12} className="text-success-500" aria-hidden="true" />
+          </div>
+          <div>
+            <div className="font-semibold text-white">Pass guarantee</div>
+            <div className="font-mono text-2xs text-white/50">94% first-try rate</div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }

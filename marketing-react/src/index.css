@@ -2,45 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────────
+   Design tokens — CSS custom properties for things Tailwind can't reach
+   (gradients, shadows referenced from inline styles, theme switches).
+   These mirror tailwind.config.ts and are used for runtime theme work.
+   ─────────────────────────────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --brand-50:  #FFF7ED;
+  --brand-500: #F97316;
+  --brand-600: #EA580C;
+  --brand-700: #C2410C;
+
+  /* Navy (dark sections) */
+  --navy-950: #070B16;
+  --navy-900: #0B1120;
+  --navy-800: #0F172A;
+  --navy-700: #131B2E;
+  --navy-600: #1A3557;
+
+  /* Surfaces (warm) */
+  --surface:        #FAFAF9;
+  --surface-alt:    #F4F4F5;
+  --surface-card:   #FFFFFF;
+  --surface-sunken: #F1F5F9;
+
+  /* Ink (warm graphite, not pure gray — per brief) */
+  --ink:        #0B0F1A;
+  --ink-body:   #374151;
+  --ink-dim:    #6B7280;
+  --ink-muted:  #94A3B8;
+  --ink-line:   #E5E7EB;
+
+  /* Accent */
+  --amber-500:  #F59E0B;
+  --success-500: #10B981;
+
+  /* Hero gradient (rich navy, used for full-bleed sections) */
+  --grad-hero:
+    linear-gradient(135deg, #070B16 0%, #0B1120 40%, #131B2E 70%, #1A3557 100%);
+
+  /* Spotlight glow used behind hero CTAs / focal stats */
+  --grad-glow:
+    radial-gradient(800px circle at 50% 0%, rgba(234,88,12,0.18), transparent 60%);
+
+  /* Glass card surface — light variant */
+  --grad-card:
+    linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.5));
+
+  /* Glass card surface — dark variant */
+  --grad-card-dark:
+    linear-gradient(180deg, rgba(19,27,46,0.85), rgba(11,17,32,0.5));
+
+  /* Common easings (mirrors lib/motion.ts) */
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-snappy:   cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-hero:     cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark mode tokens (toggled via .dark on <html>) */
+html.dark {
+  --surface:        #0B0F1A;
+  --surface-alt:    #111827;
+  --surface-card:   #131B2E;
+  --surface-sunken: #0F172A;
+  --ink:            #F9FAFB;
+  --ink-body:       #D1D5DB;
+  --ink-dim:        #9CA3AF;
+  --ink-muted:      #6B7280;
+  --ink-line:       rgba(255,255,255,0.08);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Base layer — typography, page chrome, selection.
+   ─────────────────────────────────────────────────────────────────── */
 @layer base {
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    /* Enable variable font features (Inter, Fraunces) */
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: #E9EEF5;
-    background-image:
-      linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
-    background-size: 56px 56px;
-    color: #334155;
+    background-color: var(--surface);
+    color: var(--ink-body);
     line-height: 1.6;
+    /* Subtle ambient gradient — replaces the harsh #E9EEF5 grid */
+    background-image:
+      radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(251,146,60,0.06), transparent 60%),
+      radial-gradient(ellipse 800px 600px at 100% 30%, rgba(59,130,246,0.04), transparent 60%);
+    background-attachment: fixed;
   }
   ::selection {
     background: rgba(234, 88, 12, 0.25);
-    color: #0F172A;
+    color: var(--ink);
   }
   h1, h2, h3, h4, h5 {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
     letter-spacing: -0.02em;
     line-height: 1.1;
-    color: #0F172A;
+    color: var(--ink);
+  }
+  /* Editorial italic — only when the explicit `font-serif italic` classes are
+     applied. Restraint is the rule (per brief). */
+  .font-serif {
+    font-feature-settings: 'liga', 'dlig', 'salt';
+  }
+
+  /* Focus ring — accessible, subtle, brand-on-light, white-on-dark */
+  :focus-visible {
+    outline: 2px solid var(--brand-600);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  html.dark :focus-visible {
+    outline-color: var(--brand-500);
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────
+   Component layer — reusable section primitives, button system.
+   ─────────────────────────────────────────────────────────────────── */
 @layer components {
   .wrap {
     @apply mx-auto w-full max-w-wrap px-6;
   }
   .section-head-shell {
-    @apply relative overflow-hidden rounded-3xl border border-slate-200 bg-white px-6 py-10 shadow-[0_25px_50px_-35px_rgba(15,23,42,.45)] sm:px-10;
+    @apply relative overflow-hidden rounded-3xl border border-ink-line bg-white px-6 py-10 shadow-[0_25px_50px_-35px_rgba(15,23,42,.45)] sm:px-10;
   }
   .section-head-shell::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at top right, rgba(234, 88, 12, 0.12), transparent 45%);
+    background: radial-gradient(circle at top right, rgba(234, 88, 12, 0.10), transparent 45%);
     pointer-events: none;
   }
   .section-head-shell::after {
@@ -56,42 +154,82 @@
   .eyebrow {
     @apply inline-flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-600;
   }
+
+  /* Glass card — used over rich/dark backgrounds (per brief: glass with restraint) */
+  .glass {
+    background: var(--grad-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
+      0 10px 30px -12px rgba(15, 23, 42, 0.15);
+  }
+  .glass-dark {
+    background: var(--grad-card-dark);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+      0 20px 50px -20px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Button system — all states (rest, hover, focus, active, disabled). */
   .btn {
     @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 will-change-transform;
+    transition-timing-function: var(--ease-standard);
+  }
+  .btn:focus-visible {
+    @apply outline-none ring-2 ring-offset-2;
+    --tw-ring-color: var(--brand-600);
+    --tw-ring-offset-color: var(--surface);
+  }
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-50 hover:translate-y-0;
   }
   .btn-primary {
     @apply bg-brand-600 text-white shadow-[0_10px_30px_-10px_rgba(234,88,12,.55)] hover:bg-brand-700 hover:shadow-[0_18px_40px_-10px_rgba(234,88,12,.65)] hover:-translate-y-0.5 active:translate-y-0;
   }
   .btn-ghost {
-    @apply border border-ink-line bg-white text-ink shadow-sm hover:border-slate-300 hover:bg-slate-50;
+    @apply border border-ink-line bg-white text-ink shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost-dark {
+    @apply border border-white/10 bg-white/5 text-white shadow-sm hover:border-white/20 hover:bg-white/10 hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-link {
+    @apply text-brand-600 hover:text-brand-700 hover:underline underline-offset-4;
   }
   .btn-lg {
     @apply px-6 py-3.5 text-[15px];
   }
+  .btn-md {
+    @apply px-5 py-2.5 text-sm;
+  }
   .btn-sm {
     @apply px-4 py-2 text-[13px];
   }
+
   .card {
     @apply rounded-2xl border border-ink-line bg-white shadow-card;
   }
   .card-hover {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-cardHover hover:border-slate-200;
+    transition-timing-function: var(--ease-standard);
   }
-}
 
-/* Remove gradient-based color styling across frontend */
-[class*='bg-gradient'] {
-  background-image: none !important;
-}
+  /* Stats — mono numbers, terminal aesthetic (per brief) */
+  .stat-number {
+    @apply font-mono tabular-nums tracking-tight text-ink;
+    font-feature-settings: 'tnum', 'lnum';
+  }
 
-[class*='bg-clip-text'] {
-  -webkit-background-clip: border-box !important;
-  background-clip: border-box !important;
-  color: #0f172a !important;
-}
-
-[class*='text-transparent'] {
-  color: inherit !important;
+  /* Editorial emphasis — Fraunces italic (used only on hero per brief commandments) */
+  .editorial {
+    @apply font-serif italic;
+    font-weight: 500;
+    font-variation-settings: 'opsz' 144, 'SOFT' 60, 'WONK' 0;
+  }
 }
 
 /* Infinite marquee track — child must contain duplicated content */
@@ -100,9 +238,24 @@
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
 
+/* Shimmer overlay (CTA accent) */
+.shimmer-overlay {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+}
+
+/* prefers-reduced-motion — kill all animation and Framer transitions
+   in tandem with respectMotionPreference() in lib/motion.ts. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
