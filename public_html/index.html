@@ -3,66 +3,99 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0B1120" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#FAFAF9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B1120" media="(prefers-color-scheme: dark)" />
+
     <link rel="icon" type="image/png" href="./logo-icon.png" />
     <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+
     <title>IntelliCert — Pass the CSP Exam with Brain-Based Learning</title>
     <meta
       name="description"
-      content="The CSP exam prep platform built on memory science. Spaced repetition, active recall, Feynman teach-back. $12/month. Pass guarantee."
+      content="The CSP exam prep platform built on memory science. Active recall, spaced repetition, AI voice tutoring. SAR 99/month or SAR 449/6-month. Pass guarantee."
     />
-    <meta name="keywords" content="CSP exam prep, certified safety professional, CSP study guide, BCSP, ASP, OHST, CHST, CIH, safety certification" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://intellicert.app/" />
+    <meta name="keywords" content="CSP exam prep, certified safety professional, CSP study guide, BCSP, ASP, OHST, CHST, CIH, safety certification, brain-based learning, spaced repetition, active recall" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://intellicert.co.uk/" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph / Facebook / LinkedIn -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://intellicert.app/" />
+    <meta property="og:url" content="https://intellicert.co.uk/" />
     <meta property="og:title" content="IntelliCert — Pass the CSP Exam with Brain-Based Learning" />
-    <meta property="og:description" content="Memory-science exam prep for safety professionals. Spaced repetition, active recall, Feynman teach-back. Pass guarantee." />
-    <meta property="og:image" content="https://intellicert.app/icons/og-image.png" />
+    <meta property="og:description" content="Memory-science exam prep for safety professionals. Active recall, spaced repetition, AI voice tutoring. Pass guarantee." />
+    <meta property="og:image" content="https://intellicert.co.uk/icons/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="IntelliCert — Pass the CSP Exam with Brain-Based Learning" />
     <meta property="og:site_name" content="IntelliCert" />
+    <meta property="og:locale" content="en_GB" />
 
-    <!-- Twitter -->
+    <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@intellicert" />
     <meta name="twitter:title" content="IntelliCert — Pass the CSP Exam" />
-    <meta name="twitter:description" content="Memory-science exam prep for safety professionals." />
-    <meta name="twitter:image" content="https://intellicert.app/icons/og-image.png" />
+    <meta name="twitter:description" content="Memory-science exam prep for safety professionals. Active recall, spaced repetition, AI voice tutoring." />
+    <meta name="twitter:image" content="https://intellicert.co.uk/icons/og-image.png" />
 
-    <!-- JSON-LD: Course + Offer -->
+    <!-- JSON-LD: Organization + Course + Offer (per brief) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "IntelliCert CSP Exam Prep",
-      "description": "Memory-science based study platform for the Certified Safety Professional (CSP) exam.",
-      "provider": {
-        "@type": "Organization",
-        "name": "IntelliCert",
-        "url": "https://intellicert.app/"
-      },
-      "offers": [
-        { "@type": "Offer", "name": "Monthly", "price": "5", "priceCurrency": "USD", "category": "subscription" },
-        { "@type": "Offer", "name": "6-month", "price": "25", "priceCurrency": "USD", "category": "subscription" }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://intellicert.co.uk/#org",
+          "name": "IntelliCert",
+          "url": "https://intellicert.co.uk/",
+          "logo": "https://intellicert.co.uk/logo.png",
+          "parentOrganization": { "@type": "Organization", "name": "Nexara" },
+          "sameAs": []
+        },
+        {
+          "@type": "Course",
+          "name": "IntelliCert CSP Exam Prep",
+          "description": "Brain-based study platform for the Certified Safety Professional (CSP) exam — active recall, spaced repetition, AI voice tutoring, mnemonic generators, and 1,800+ practice items.",
+          "provider": { "@id": "https://intellicert.co.uk/#org" },
+          "educationalLevel": "Professional",
+          "teaches": "Safety management, risk assessment, hazard control, ergonomics, industrial hygiene",
+          "hasCourseInstance": {
+            "@type": "CourseInstance",
+            "courseMode": "online",
+            "courseWorkload": "PT60H"
+          },
+          "offers": [
+            { "@type": "Offer", "name": "Monthly", "price": "99", "priceCurrency": "SAR", "category": "subscription", "availability": "https://schema.org/InStock" },
+            { "@type": "Offer", "name": "6-month", "price": "449", "priceCurrency": "SAR", "category": "subscription", "availability": "https://schema.org/InStock" },
+            { "@type": "Offer", "name": "Free trial", "price": "0", "priceCurrency": "SAR", "category": "trial", "availability": "https://schema.org/InStock" }
+          ]
+        }
       ]
     }
     </script>
 
+    <!-- Font preconnect (anonymous + crossorigin variants) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!--
+      Google Fonts (production strategy):
+      - Plus Jakarta Sans 500-800 — display headlines (existing brand)
+      - Inter 400-700 — body text (existing brand)
+      - Fraunces 400-700 italic — editorial emphasis on hero only (per brief)
+      - JetBrains Mono 500-600 — stats / exam codes (per brief)
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=JetBrains+Mono:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="./assets/index-D0fgJzgM.js"></script>
-    <link rel="modulepreload" crossorigin href="./assets/icons-CvR4sguF.js">
-    <link rel="modulepreload" crossorigin href="./assets/motion-DkgSu1Dm.js">
-    <link rel="modulepreload" crossorigin href="./assets/react-CRiQXSQK.js">
-    <link rel="stylesheet" crossorigin href="./assets/index-CEDqKL5y.css">
+    <script type="module" crossorigin src="./assets/index-B82PtpW6.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/icons-DMyRweLK.js">
+    <link rel="modulepreload" crossorigin href="./assets/motion-DPj60p48.js">
+    <link rel="modulepreload" crossorigin href="./assets/react-BGN0FLKV.js">
+    <link rel="stylesheet" crossorigin href="./assets/index-xca7iECh.css">
   </head>
-  <body class="bg-navy-900 text-ink antialiased">
-    <div id="root"></div>
+  <body class="bg-surface text-ink-body antialiased">
+    <div id="root"></div>
   </body>
 </html>
