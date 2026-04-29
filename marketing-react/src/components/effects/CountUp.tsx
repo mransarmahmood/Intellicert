@@ -29,7 +29,7 @@ type Props = {
 export default function CountUp({
   to,
   from = 0,
-  duration = 1600,
+  duration = 1100,
   decimals = 0,
   prefix = '',
   suffix = '',
@@ -37,7 +37,9 @@ export default function CountUp({
   easing = (t) => 1 - Math.pow(1 - t, 3), // easeOutCubic
 }: Props) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: '-50px' });
+  // Generous margin so animation triggers slightly BEFORE the user scrolls
+  // to it — by the time they read the stat, it's already at final value.
+  const inView = useInView(ref, { once: true, margin: '200px 0px 200px 0px' });
   const reduced = useReducedMotion();
   const [val, setVal] = useState(reduced ? to : from);
 

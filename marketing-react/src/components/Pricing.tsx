@@ -24,18 +24,18 @@ type Tier = {
 const TIERS: Tier[] = [
   {
     id: 'free',
-    name: 'Free',
-    blurb: 'Explore the platform. Perfect for testing the brain-based method on a slice of the curriculum.',
+    name: 'Sampler',
+    blurb: 'A taste of the method on one domain. Enough to feel the retention difference — not the full curriculum.',
     priceMonthly: 0,
     priceSixMonth: 0,
     features: [
-      'Sample of 50 flashcards',
-      'Domain 1 free preview',
-      '1 practice quiz per week',
-      'Limited Voice Mode',
-      'No credit card required',
+      '1 of 7 CSP domains unlocked',
+      '50 curated flashcards',
+      '1 practice quiz / week',
+      'Voice Mode (5 min daily cap)',
+      'No card · upgrade when ready',
     ],
-    cta: { label: 'Start Free', href: '/app/register' },
+    cta: { label: 'Try the Method', href: '/app/register' },
   },
   {
     id: 'pro',

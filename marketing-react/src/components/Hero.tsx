@@ -304,18 +304,36 @@ function HeroMockup({ slide, navItems, active, setActive }: HeroMockupProps) {
           </div>
         </div>
 
-        {/* Slide indicators */}
-        <div className="flex items-center justify-center gap-2 border-t border-white/5 py-3">
-          {slides.map((s, i) => (
-            <button
-              key={s.id}
-              onClick={() => setActive(i)}
-              aria-label={`Show slide ${i + 1}: ${s.title}`}
-              className={`h-1.5 rounded-full transition-all duration-300 ease-ease-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 ${
-                i === active ? 'w-8 bg-brand-500' : 'w-1.5 bg-white/20 hover:bg-white/30'
-              }`}
-            />
-          ))}
+        {/* Slide indicators — labeled chips with active fill */}
+        <div className="flex items-center justify-center gap-1 border-t border-white/5 px-2 py-3">
+          {slides.map((s, i) => {
+            const isActive = i === active;
+            return (
+              <button
+                key={s.id}
+                onClick={() => setActive(i)}
+                aria-label={`Show slide: ${s.title}`}
+                aria-current={isActive ? 'true' : undefined}
+                className={`group relative flex items-center gap-1.5 overflow-hidden rounded-pill px-3 py-1.5 text-2xs font-bold uppercase tracking-wider transition-all duration-300 ease-ease-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-950 ${
+                  isActive ? 'bg-white/10 text-white' : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                <span className={`h-1.5 w-1.5 rounded-full transition-colors ${isActive ? 'bg-brand-500' : 'bg-white/30'}`} />
+                <span>{s.chip}</span>
+                {/* Auto-advance progress bar */}
+                {isActive && (
+                  <motion.span
+                    key={`progress-${active}`}
+                    aria-hidden="true"
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 4.2, ease: 'linear' }}
+                    className="absolute inset-x-0 bottom-0 h-px origin-left bg-brand-500/60"
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
       </div>
 

@@ -7,43 +7,43 @@ import { fadeUp, inViewOnce } from '../lib/motion';
 const faqs = [
   {
     id: 'q1',
-    q: 'How is this different from Quizlet, Anki, or a textbook?',
-    a: 'Traditional resources provide information. IntelliCert provides a structured retrieval system: every fact you encounter enters a spaced-repetition schedule, every weak node gets a custom AI explanation, and every diagram becomes an image-occlusion card. Information is the input — retention is the output.',
+    q: 'How is this different from Quizlet or Anki?',
+    a: "Those store information. We engineer retention. Every card schedules itself, every gap triggers a custom explanation, every diagram becomes a recall test.",
   },
   {
     id: 'q2',
-    q: 'How long does it take to prepare for the CSP?',
-    a: 'Most candidates study 3–6 months. Because IntelliCert is built on spaced repetition, you spend less total time and retain more. The 6-month plan is sized for a comfortable, complete preparation with buffer for review.',
+    q: "How long until I'm exam-ready?",
+    a: '3–6 months for most. The system spaces and tests you so you study less total — and remember more. The 6-month plan is sized for a comfortable run-up.',
   },
   {
     id: 'q3',
-    q: "What happens if I don't pass the exam?",
-    a: "You get free access until you pass — no questions asked. If you complete the curriculum and don't clear the exam, we extend your account at no cost. We built this platform to deliver a pass and we stand behind it.",
+    q: "What if I don't pass?",
+    a: "We extend your access free, until you do. Complete the curriculum and we stand behind the result.",
   },
   {
     id: 'q4',
-    q: 'Which certifications are covered?',
-    a: 'CSP (primary focus), ASP, OHST, CHST, and CIH share content under the BCSP and ABIH blueprints. The Pro+ Mastery tier unlocks all five certifications. Pro tier covers CSP only.',
+    q: 'Which certifications?',
+    a: 'CSP, ASP, OHST, CHST, CIH. Pro covers CSP. Pro+ Mastery unlocks all five.',
   },
   {
     id: 'q5',
-    q: 'Can I cancel anytime?',
-    a: 'Yes. Cancel from your dashboard in one click. No retention calls, no dark patterns. Your access continues until the end of your current billing period — and the 7-day money-back applies if you change your mind in the first week.',
+    q: 'Cancel anytime?',
+    a: 'One click from your dashboard. No retention calls. 7-day money-back on any paid plan.',
   },
   {
     id: 'q6',
-    q: 'Does it work on mobile and offline?',
-    a: 'Yes — responsive on phone, tablet, and desktop. Install it to your home screen for an app-like experience. Voice Mode is designed specifically for commute use.',
+    q: 'Mobile and offline?',
+    a: 'Yes — phone, tablet, desktop. Install to home screen for offline flashcards. Voice Mode is built for commutes.',
   },
   {
     id: 'q7',
-    q: 'Who writes and reviews the content?',
-    a: 'Content is curated by practicing CSPs and reviewed against the BCSP exam blueprint (CSP11). Every formula, regulation, and calculation is verified against the cited primary source — OSHA 29 CFR, NIOSH, ACGIH TLVs, ANSI/ASSP standards. Mastery topics carry an additional 12-point defensibility checklist.',
+    q: 'Who writes the content?',
+    a: 'Practicing CSPs, reviewed against the BCSP CSP11 blueprint. Every formula and number cites OSHA, NIOSH, ACGIH, or ANSI sources.',
   },
   {
     id: 'q8',
     q: 'Is my data private?',
-    a: 'Your study data is yours. We never sell or share learner data. Voice transcriptions are processed with on-device speech recognition where possible and never stored. Authentication is token-based; no third-party tracking on the marketing site.',
+    a: "Yours. We never sell or share. Voice runs on-device where possible. No third-party tracking on the marketing site.",
   },
 ];
 
