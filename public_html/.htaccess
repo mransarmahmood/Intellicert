@@ -1,0 +1,11 @@
+# Marketing SPA fallback — serves index.html for unknown sub-paths.
+# Note: in production this is the root site, but we still need the rule
+# in case a hash-route is bookmarked.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_URI} !^/(api|admin|app)/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>

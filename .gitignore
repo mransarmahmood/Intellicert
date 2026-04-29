@@ -1,0 +1,16 @@
+# production branch — deployable artifacts only
+# Never commit secrets here.
+backend-app/.env
+backend-app/.env.local
+backend-app/.env.backup
+backend-app/storage/logs/*.log
+backend-app/storage/framework/cache/*
+backend-app/storage/framework/sessions/*
+backend-app/storage/framework/views/*
+!backend-app/storage/**/.gitkeep
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
