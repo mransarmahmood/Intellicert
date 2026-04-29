@@ -2,6 +2,16 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Deep-link fix: build emits ./assets/... (relative). Without a <base>,
+      // /admin/users loads /admin/users/assets/... and 404s. Inject <base> at
+      // the SPA root so relative URLs resolve correctly on any depth.
+      (function () {
+        var p = window.location.pathname;
+        var m = p.match(/^(.*\/admin)(?:\/|$)/);
+        if (m) document.write('<base href="' + m[1] + '/">');
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>IntelliCert Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -14,6 +24,6 @@
     <link rel="stylesheet" crossorigin href="./assets/index-CvnoGCpT.css">
   </head>
   <body class="bg-surface text-ink-body antialiased">
-    <div id="root"></div>
+    <div id="root"></div>
   </body>
 </html>

@@ -58,6 +58,7 @@ if ($stripped !== $uri && file_exists($path) && !is_dir($path)) {
 // when the request path doesn't match an actual file (client-side routing).
 $spaRoots = [
     '/backend/public/app'       => '/backend/public/app/index.html',
+    '/backend/public/admin'     => '/backend/public/admin/index.html',
     '/admin-react/dist'         => '/admin-react/dist/index.html',
     '/public'                   => '/public/index.html',
 ];
